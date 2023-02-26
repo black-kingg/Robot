@@ -1,4 +1,5 @@
-//variables for setup
+import * as THREE from "../node_modules/three/build/three.module.js";
+import { GLTFLoader } from '../node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 
 let container;
 let camera;
@@ -6,10 +7,9 @@ let renderer;
 let scene;
 let robot;
 
-function init(){
+function init() {
     container = document.querySelector('.scene');
-
-    //create scene
+    // create scene
     scene = new THREE.Scene();
 
     const fov = 35;
@@ -17,7 +17,7 @@ function init(){
     const near = 0.1;
     const far = 1000;
 
-    //camera setup
+    // camera setup
     camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.set(-8, 3, 25);
 
@@ -28,26 +28,25 @@ function init(){
     light.position.set(10, 10, 100);
     scene.add(light);
 
-    //renderer
-    renderer = new THREE.WebGLRenderer({antialias:true, alpha:true });
+    // renderer
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
 
     container.appendChild(renderer.domElement);
 
-    //load model
-    const loader = new THREE.GLTFLoader();
-    loader.load('./combat_robot/scene.gltf', 
-    function(gltf){
-        scene.add(gltf.scene);
-        robot = gltf.scene.children[0];
-        animate();
-    });
-
+    // load model
+    const loader = new GLTFLoader();
+    loader.load('./combat_robot/scene.gltf',
+        function (gltf) {
+            scene.add(gltf.scene);
+            robot = gltf.scene.children[0];
+            animate();
+        });
 }
 
 function animate() {
-    requestAnimationFrame(animate);    
+    requestAnimationFrame(animate);
     if (robot) {
         robot.rotation.z += 0.005;
     }
@@ -57,7 +56,6 @@ function animate() {
 function onWindowResize() {
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
-
     renderer.setSize(container.clientWidth, container.clientHeight);
 }
 
